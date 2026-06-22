@@ -88,3 +88,4 @@ pnpm-debug.log*
 # Editor directories
 .vscode/
 .idea/
+.vs/
