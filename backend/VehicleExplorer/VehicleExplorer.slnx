@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Solution Items/" />
+  <Folder Name="/Solution Items/src/">
+    <Project Path="VehicleExplorer.Api/VehicleExplorer.Api.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/tests/">
+    <Project Path="VehicleExplorer.Tests/VehicleExplorer.Tests.csproj" />
+  </Folder>
+</Solution>
