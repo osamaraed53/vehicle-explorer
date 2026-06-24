@@ -2,7 +2,7 @@
 
 namespace VehicleExplorer.Api.Clients;
 
-public class NhtsaClient : INhtsaClient
+public class NhtsaClient(HttpClient httpClient) : INhtsaClient
 {
     public Task<IReadOnlyList<MakeResponse>> GetAllMakesAsync()
     {
