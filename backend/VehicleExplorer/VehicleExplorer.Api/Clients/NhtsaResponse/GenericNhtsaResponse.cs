@@ -1,6 +1,6 @@
 ﻿namespace VehicleExplorer.Api.Clients.NhtsaResponse;
 
-public sealed class GeneralNhtsaResponse<T>
+public sealed class GenericNhtsaResponse<T>
 {
     public int Count { get; set; }
 
