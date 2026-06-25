@@ -4,18 +4,31 @@ namespace VehicleExplorer.Api.Clients;
 
 public class NhtsaClient(HttpClient httpClient) : INhtsaClient
 {
-    public Task<IReadOnlyList<MakeResponse>> GetAllMakesAsync()
+    public async Task<IReadOnlyList<MakeResponse>> GetAllMakesAsync()
     {
-        throw new NotImplementedException();
+        var response = await httpClient.GetFromJsonAsync<GenericNhtsaResponse<MakeResponse>>("getallmakes?format=json");
+        return response?.Results ?? [];
     }
 
-    public Task<IReadOnlyList<ModelResponse>> GetModelsAsync(int makeId, int year, string? vehicleTypet)
+    public async Task<IReadOnlyList<ModelResponse>> GetModelsAsync(int makeId, int year, string? vehicleType)
     {
-        throw new NotImplementedException();
+        var url = $"GetModelsForMakeIdYear/makeId/{makeId}/modelyear/{year}";
+        if (!string.IsNullOrWhiteSpace(vehicleType))
+        {
+            url += $"/vehicletype/{Uri.EscapeDataString(vehicleType)}";
+        }
+        url += "?format=json";
+
+        var response = await httpClient.GetFromJsonAsync<GenericNhtsaResponse<ModelResponse>>(url);
+        return response?.Results ?? [];
     }
 
-    public Task<IReadOnlyList<VehicleTypeResponse>> GetVehicleTypesForMakeAsync(int makeId)
+    public async  Task<IReadOnlyList<VehicleTypeResponse>> GetVehicleTypesForMakeAsync(int makeId)
     {
-        throw new NotImplementedException();
+
+        var response = await httpClient.GetFromJsonAsync<GenericNhtsaResponse<VehicleTypeResponse>>($"GetVehicleTypesForMakeId/{makeId}?format=json");
+        return response?.Results ?? [];
+
+
     }
 }
