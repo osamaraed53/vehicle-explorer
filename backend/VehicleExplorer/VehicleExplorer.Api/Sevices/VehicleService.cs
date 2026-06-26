@@ -6,10 +6,7 @@ namespace VehicleExplorer.Api.Sevices;
 
 public sealed class VehicleService(INhtsaClient client, HybridCache cache) : IVehicleService
 {
-    private static readonly HybridCacheEntryOptions CacheOptions = new()
-    {
-        Expiration = TimeSpan.FromHours(12),
-    };
+
     public async Task<IReadOnlyList<MakeDTO>> GetMakesAsync(CancellationToken cancellationToken)
     {
         return await cache.GetOrCreateAsync("makes", async (cancellationToken) =>
@@ -18,7 +15,7 @@ public sealed class VehicleService(INhtsaClient client, HybridCache cache) : IVe
             return (IReadOnlyList<MakeDTO>)[.. makes
                 .Select(m => new MakeDTO() {Id = m.MakeId,Name= m.MakeName })
                 .OrderBy(m => m.Name, StringComparer.OrdinalIgnoreCase)];
-        }, CacheOptions, cancellationToken: cancellationToken);
+        }, cancellationToken: cancellationToken);
     }
 
     public async Task<IReadOnlyList<ModelDTO>> GetModelsAsync(int makeId, int year, string? vehicleType, CancellationToken cancellationToken)
@@ -33,7 +30,7 @@ public sealed class VehicleService(INhtsaClient client, HybridCache cache) : IVe
                 .Select(m => new ModelDTO() {Id = m.ModelId,Name=  m.ModelName,MakeId= m.MakeId,MakeName= m.MakeName })
                 .OrderBy(m => m.Name, StringComparer.OrdinalIgnoreCase)];
 
-        }, CacheOptions, cancellationToken: cancellationToken);
+        }, cancellationToken: cancellationToken);
     }
 
     public async Task<IReadOnlyList<VehicleTypeDTO>> GetVehicleTypesAsync(int makeId, CancellationToken cancellationToken)
@@ -45,6 +42,6 @@ public sealed class VehicleService(INhtsaClient client, HybridCache cache) : IVe
                 .Select(t => new VehicleTypeDTO() { Id=  t.VehicleTypeId,Name=  t.VehicleTypeName })
                 .OrderBy(t => t.Name, StringComparer.OrdinalIgnoreCase)];
 
-        }, CacheOptions, cancellationToken: cancellationToken);
+        }, cancellationToken: cancellationToken);
     }
 }

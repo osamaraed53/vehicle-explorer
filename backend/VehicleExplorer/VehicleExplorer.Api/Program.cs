@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Caching.Hybrid;
 using VehicleExplorer.Api.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,17 +7,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-var section = builder.Configuration.GetSection("NhtsaClient");
+var nhtsaClientSection = builder.Configuration.GetSection("NhtsaClient");
 
 builder.Services.AddHttpClient<INhtsaClient, NhtsaClient>(client =>
 {
-    client.BaseAddress = new Uri(section["BaseAddressURL"]
+    client.BaseAddress = new Uri(nhtsaClientSection["BaseAddressURL"]
         ?? throw new InvalidOperationException("Missing NhtsaClient:BaseAddressURL"));
-    client.Timeout = section.GetValue<TimeSpan>("Timeout");
+    client.Timeout = nhtsaClientSection.GetValue<TimeSpan>("Timeout");
 }).AddStandardResilienceHandler();
 
+var cacheSection = builder.Configuration.GetSection("Cache");
 
-builder.Services.AddHybridCache();
+
+builder.Services.AddHybridCache(options =>
+{
+    options.DefaultEntryOptions = new HybridCacheEntryOptions
+    {
+        Expiration = nhtsaClientSection.GetValue<TimeSpan>("Expiration")
+    };
+});
 
 
 
