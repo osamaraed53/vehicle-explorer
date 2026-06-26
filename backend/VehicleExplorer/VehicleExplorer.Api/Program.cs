@@ -16,6 +16,7 @@ builder.Services.AddHttpClient<INhtsaClient, NhtsaClient>(client =>
 }).AddStandardResilienceHandler();
 
 
+builder.Services.AddHybridCache();
 
 
 
