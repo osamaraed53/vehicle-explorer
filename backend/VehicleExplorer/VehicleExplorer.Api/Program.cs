@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Caching.Hybrid;
+using System.Reflection;
 using VehicleExplorer.Api.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,11 @@ builder.Services.AddHybridCache(options =>
     {
         Expiration = nhtsaClientSection.GetValue<TimeSpan>("Expiration")
     };
+});
+
+builder.Services.AddMediatR(config =>
+{
+    config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
 });
 
 
