@@ -1,13 +1,15 @@
+using Carter;
 using Microsoft.Extensions.Caching.Hybrid;
 using Scalar.AspNetCore;
 using System.Reflection;
 using VehicleExplorer.Api.Clients;
+using VehicleExplorer.Api.Sevices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddCarter();
 
 var nhtsaClientSection = builder.Configuration.GetSection("NhtsaClient");
 
@@ -34,7 +36,7 @@ builder.Services.AddMediatR(config =>
     config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
 });
 
-
+builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 var app = builder.Build();
 
@@ -45,7 +47,6 @@ if (app.Environment.IsDevelopment())
 
 }
 
-app.UseHttpsRedirection();
-
+app.MapCarter();
 
 app.Run();
