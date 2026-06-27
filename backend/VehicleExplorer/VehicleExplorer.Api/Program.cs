@@ -25,7 +25,7 @@ builder.Services.AddHybridCache(options =>
 {
     options.DefaultEntryOptions = new HybridCacheEntryOptions
     {
-        Expiration = nhtsaClientSection.GetValue<TimeSpan>("Expiration")
+        Expiration = cacheSection.GetValue<TimeSpan>("Expiration")
     };
 });
 
