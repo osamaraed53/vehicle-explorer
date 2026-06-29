@@ -7,7 +7,7 @@ public class GetMakesEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/makes", async (GetMakesRequest request, ISender sender) => {
+        app.MapGet("/makes", async ([AsParameters] GetMakesRequest request, ISender sender) => {
 
             var result = await sender.Send(request);
 
