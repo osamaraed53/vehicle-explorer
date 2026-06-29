@@ -8,7 +8,7 @@ namespace VehicleExplorer.Api.Vehicle.GetModels;
 
 public record GetModelsRequest([FromRoute]int MakeId, int Year, string? VehicleType, int Page, int PageSize) : IRequest<GetModelsResponse>;
 
-public record GetModelsResponse(IReadOnlyList<ModelDTO> Data , int Count);
+public record GetModelsResponse(IReadOnlyList<ModelDTO> Data, int Count);
 
 public class GetModelsHandler(IVehicleService vehicleService) : IRequestHandler<GetModelsRequest, GetModelsResponse>
 {
