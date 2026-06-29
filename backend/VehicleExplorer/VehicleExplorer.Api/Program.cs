@@ -5,6 +5,7 @@ using Scalar.AspNetCore;
 using System.Reflection;
 using VehicleExplorer.Api.Clients;
 using VehicleExplorer.Api.Middlewares.Behaviors;
+using VehicleExplorer.Api.Middlewares.Handler;
 using VehicleExplorer.Api.Sevices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,10 +42,13 @@ builder.Services.AddMediatR(config =>
 });
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 var app = builder.Build();
+
+app.UseExceptionHandler(option => { });
 
 if (app.Environment.IsDevelopment())
 {
