@@ -4,10 +4,12 @@ using VehicleExplorer.Api.Exceptions;
 
 namespace VehicleExplorer.Api.Middlewares.Handler;
 
-public class CustomExceptionHandler : IExceptionHandler
+public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken cancellationToken)
     {
+        logger.LogError("Error Message: {exceptionMessage}, Time of occurrence {time}",exception.Message, DateTime.UtcNow);
+
         (string Detail, string Title, int StatusCode) = exception switch
         {
             ValidationException =>
