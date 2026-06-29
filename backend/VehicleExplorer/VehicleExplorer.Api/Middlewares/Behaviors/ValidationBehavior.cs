@@ -1,5 +1,7 @@
 using FluentValidation;
 using MediatR;
+using VehicleExplorer.Api.Exceptions;
+using ValidationException = VehicleExplorer.Api.Exceptions.ValidationException;
 
 namespace VehicleExplorer.Api.Middlewares.Behaviors;
 
@@ -20,6 +22,11 @@ public sealed class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidat
             validationResults
             .Where(r => r.Errors.Count != 0)
             .SelectMany(r => r.Errors)
+            .Select(failure => new ValidationFailureDto
+            {
+                PropertyName = failure.PropertyName,
+                ErrorMessage = failure.ErrorMessage
+            })
             .ToList();
 
         if (failures.Count != 0)
