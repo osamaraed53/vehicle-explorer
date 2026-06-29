@@ -38,6 +38,7 @@ builder.Services.AddHybridCache(options =>
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
+    config.AddOpenBehavior(typeof(LoggingBehavior<,>));
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 
