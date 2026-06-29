@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using VehicleExplorer.Api.DTOs;
-using VehicleExplorer.Api.Sevices;
+using VehicleExplorer.Api.Services;
 
 namespace VehicleExplorer.Api.Vehicle.GetModels;
 

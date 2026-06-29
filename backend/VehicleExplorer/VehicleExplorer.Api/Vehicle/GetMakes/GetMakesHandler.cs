@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Distributed;
 using VehicleExplorer.Api.DTOs;
-using VehicleExplorer.Api.Sevices;
+using VehicleExplorer.Api.Services;
 
 namespace VehicleExplorer.Api.Vehicle.GetMakes;
 

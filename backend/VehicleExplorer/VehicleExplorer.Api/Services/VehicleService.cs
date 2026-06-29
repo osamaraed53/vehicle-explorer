@@ -2,7 +2,7 @@
 using VehicleExplorer.Api.Clients;
 using VehicleExplorer.Api.DTOs;
 
-namespace VehicleExplorer.Api.Sevices;
+namespace VehicleExplorer.Api.Services;
 
 public sealed class VehicleService(INhtsaClient client, HybridCache cache) : IVehicleService
 {

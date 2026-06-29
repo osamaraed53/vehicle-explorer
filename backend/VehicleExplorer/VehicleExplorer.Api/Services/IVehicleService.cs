@@ -1,6 +1,6 @@
 ﻿using VehicleExplorer.Api.DTOs;
 
-namespace VehicleExplorer.Api.Sevices;
+namespace VehicleExplorer.Api.Services;
 
 public interface IVehicleService
 {

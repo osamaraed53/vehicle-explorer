@@ -6,7 +6,7 @@ using System.Reflection;
 using VehicleExplorer.Api.Clients;
 using VehicleExplorer.Api.Middlewares.Behaviors;
 using VehicleExplorer.Api.Middlewares.Handler;
-using VehicleExplorer.Api.Sevices;
+using VehicleExplorer.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
