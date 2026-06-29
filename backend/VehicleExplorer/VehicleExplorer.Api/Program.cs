@@ -1,8 +1,10 @@
 using Carter;
+using FluentValidation;
 using Microsoft.Extensions.Caching.Hybrid;
 using Scalar.AspNetCore;
 using System.Reflection;
 using VehicleExplorer.Api.Clients;
+using VehicleExplorer.Api.Middlewares.Behaviors;
 using VehicleExplorer.Api.Sevices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 builder.Services.AddCarter();
+
 
 var nhtsaClientSection = builder.Configuration.GetSection("NhtsaClient");
 
@@ -34,7 +37,10 @@ builder.Services.AddHybridCache(options =>
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
+    config.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
+
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 
