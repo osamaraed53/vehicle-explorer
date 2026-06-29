@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using VehicleExplorer.Api.Exceptions;
 
@@ -14,15 +14,24 @@ public class CustomExceptionHandler : IExceptionHandler
             (
                 exception.Message,
                 exception.GetType().Name,
-                context.Response.StatusCode = StatusCodes.Status400BadRequest
+                StatusCodes.Status400BadRequest
+            ),
+            ClientException =>
+            (
+                exception.Message,
+                exception.GetType().Name,
+                StatusCodes.Status502BadGateway
             ),
             _ =>
             (
                 exception.Message,
                 exception.GetType().Name,
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError
+                StatusCodes.Status500InternalServerError
             )
         };
+
+
+        context.Response.StatusCode = StatusCode;
 
         var problemDetails = new ProblemDetails
         {
