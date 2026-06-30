@@ -18,7 +18,7 @@ public class GetMakesHandlerTests
     {
         _vehicleService.GetMakesAsync(Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(Makes(30)));
-        
+
         var handler = new GetMakesHandler(_vehicleService);
 
         var response = await handler.Handle(new GetMakesRequest(Page: 2, PageSize: 10), CancellationToken.None);
@@ -40,5 +40,40 @@ public class GetMakesHandlerTests
 
         response.Data.ShouldBeEmpty();
         response.Count.ShouldBe(5);
+    }
+
+    [Fact]
+    public async Task Filters_by_search_term_case_insensitively_and_counts_only_matches()
+    {
+        _vehicleService.GetMakesAsync(Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<IReadOnlyList<MakeDTO>>(
+            [
+                new MakeDTO { Id = 1, Name = "Toyota" },
+                new MakeDTO { Id = 2, Name = "Lexus" },
+                new MakeDTO { Id = 3, Name = "Scion (Toyota)" },
+            ]));
+        var handler = new GetMakesHandler(_vehicleService);
+
+        var response = await handler.Handle(
+            new GetMakesRequest(Page: 1, PageSize: 10, Search: "toyota"),
+            CancellationToken.None);
+
+        response.Count.ShouldBe(2);
+        response.Data.Select(m => m.Id).ShouldBe([1, 3]);
+    }
+
+    [Fact]
+    public async Task Paginates_within_the_filtered_subset()
+    {
+        _vehicleService.GetMakesAsync(Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(Makes(30)));
+        var handler = new GetMakesHandler(_vehicleService);
+
+        var response = await handler.Handle(
+            new GetMakesRequest(Page: 2, PageSize: 4, Search: "Make 01"),
+            CancellationToken.None);
+
+        response.Count.ShouldBe(10);
+        response.Data.Count.ShouldBe(4);
     }
 }
