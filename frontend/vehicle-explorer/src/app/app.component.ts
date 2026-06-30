@@ -6,8 +6,9 @@ import { RouterOutlet } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'vehicle-explorer';
+    protected readonly year = new Date().getFullYear();
+
 }
