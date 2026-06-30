@@ -60,6 +60,8 @@ builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 var app = builder.Build();
 
+app.UseCors("AllowAngularApp");
+
 app.UseExceptionHandler(option => { });
 
 if (app.Environment.IsDevelopment())
@@ -68,6 +70,7 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 
 }
+
 
 app.MapCarter();
 
