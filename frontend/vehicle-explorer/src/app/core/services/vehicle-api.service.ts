@@ -13,13 +13,14 @@ import {} from '../models/paged-result.model';
 export class VehicleApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiBaseUrl;
-  private static readonly MAX_PAGE_SIZE = 10;
 
-  getMakes(page: number, pageSize: number): Observable<PagedResult<Make>> {
-    return this.http.get<PagedResult<Make>>(`${this.baseUrl}/makes`, {
-      params: this.pageParams(page, pageSize),
-    });
+getMakes(page: number, pageSize: number, search: string | null = null): Observable<PagedResult<Make>> {
+  let params = this.pageParams(page, pageSize);
+  if (search) {
+    params = params.set('search', search);
   }
+  return this.http.get<PagedResult<Make>>(`${this.baseUrl}/makes`, { params });
+}
 
   getVehicleTypes(
     makeId: number,
