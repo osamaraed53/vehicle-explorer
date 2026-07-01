@@ -1,0 +1,99 @@
+<div
+  class="flex flex-col rounded-2xl border border-slate-200 bg-white shadow-sm"
+>
+  <div
+    class="flex items-center justify-between border-b border-slate-100 px-5 py-4"
+  >
+    <div>
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500">
+        Models
+      </h2>
+      @if (store.searched() && store.selectedMake() && store.selectedYear()) {
+        <p class="mt-0.5 text-xs text-slate-400">
+          {{ store.selectedMake()?.name }} · {{ store.selectedYear() }}
+          @if (store.selectedVehicleType(); as type) {
+            · {{ type.name }}
+          }
+        </p>
+      }
+    </div>
+    <!-- Total-count . -->
+    @if (store.searched() && !store.modelsLoading() && !store.modelsError()) {
+      <span
+        class="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600"
+      >
+        {{ store.modelsCount() }}
+      </span>
+    }
+  </div>
+
+  <div class="flex-1">
+    @if (!store.searched()) {
+      <app-empty-state
+        title="No search yet"
+        hint="Select a make and model year, then choose “Search models”."
+      />
+    } @else if (store.modelsLoading()) {
+      <div class="px-5 py-12">
+        <app-spinner label="Loading models…" />
+      </div>
+    } @else if (store.modelsError()) {
+      <div class="p-5">
+        <app-alert
+          [message]="store.modelsError()!"
+          [retryable]="true"
+          (retry)="onSearch()"
+        />
+      </div>
+    } @else if (store.models().length === 0) {
+      <app-empty-state
+        title="No models found"
+        hint="Try a different year or clear the vehicle type filter."
+      />
+    } @else {
+      <!-- Single models table. -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr
+              class="border-b border-slate-100 text-xs uppercase tracking-wide text-slate-400"
+            >
+              <th scope="col" class="px-5 py-3 font-semibold">#</th>
+              <th scope="col" class="px-5 py-3 font-semibold">Model</th>
+              <th scope="col" class="px-5 py-3 font-semibold">Make</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            @for (model of store.models(); track model.id; let i = $index) {
+              <tr class="transition hover:bg-slate-50">
+                <td class="px-5 py-3 text-slate-400">
+                  {{ (store.modelsPage() - 1) * store.modelsPageSize + i + 1 }}
+                </td>
+                <td class="px-5 py-3 font-medium text-slate-700">
+                  {{ model.name }}
+                </td>
+                <td class="px-5 py-3 text-slate-500">{{ model.makeName }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+
+  @if (
+    store.searched() &&
+    !store.modelsLoading() &&
+    !store.modelsError() &&
+    store.modelsCount() > store.modelsPageSize
+  ) {
+    <div class="border-t border-slate-100 px-5 py-4">
+      <app-pagination
+        [page]="store.modelsPage()"
+        [pageSize]="store.modelsPageSize"
+        [totalItems]="store.modelsCount()"
+        (pageChange)="store.goToModelsPage($event)"
+      />
+    </div>
+  }
+</div>
