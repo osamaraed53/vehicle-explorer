@@ -13,7 +13,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-
 @Component({
   selector: 'app-searchable-select',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,7 +20,6 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   templateUrl: './searchable-select.component.html',
 })
 export class SearchableSelectComponent<T> {
-
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   readonly items = input.required<readonly T[]>();
@@ -41,11 +39,9 @@ export class SearchableSelectComponent<T> {
   protected readonly query = signal('');
   protected readonly activeIndex = signal(0);
 
-
   protected readonly hiddenCount = computed(() =>
     Math.max(0, this.allItemsCount() - this.items().length),
   );
-
 
   private readonly searchTerms = new Subject<string>();
 
@@ -63,7 +59,6 @@ export class SearchableSelectComponent<T> {
     if (this.disabled()) {
       return;
     }
-    this.query.set('');
     this.activeIndex.set(0);
     this.open.set(true);
   }
@@ -72,7 +67,6 @@ export class SearchableSelectComponent<T> {
     this.query.set(value);
     this.activeIndex.set(0);
     this.open.set(true);
-    // Ask the parent to fetch matching data (debounced).
     this.searchTerms.next(value.trim());
   }
 
@@ -86,7 +80,6 @@ export class SearchableSelectComponent<T> {
     this.selectionChange.emit(null);
     this.query.set('');
     this.open.set(false);
-    // Reset the parent's list back to the unfiltered results.
     this.searchTerms.next('');
   }
 
@@ -97,7 +90,7 @@ export class SearchableSelectComponent<T> {
 
     switch (event.key) {
       case 'ArrowDown':
-        event.preventDefault(); 
+        event.preventDefault();
         this.open.set(true);
         this.moveActive(1);
         break;
@@ -108,7 +101,7 @@ export class SearchableSelectComponent<T> {
       case 'Enter': {
         const item = this.items()[this.activeIndex()];
         if (this.open() && item !== undefined) {
-          event.preventDefault(); 
+          event.preventDefault();
           this.choose(item);
         }
         break;
