@@ -1,0 +1,86 @@
+<nav
+  class="flex flex-col items-center justify-between gap-3 sm:flex-row"
+  aria-label="Models pagination"
+>
+  <!-- summary. -->
+  <p class="text-xs text-slate-500">
+    Showing <span class="font-semibold text-slate-700">{{ rangeStart() }}</span
+    >–<span class="font-semibold text-slate-700">{{ rangeEnd() }}</span> of
+    <span class="font-semibold text-slate-700">{{ totalItems() }}</span>
+  </p>
+
+  <ul class="flex items-center gap-1">
+    <!-- Previous button-->
+    <li>
+      <button
+        type="button"
+        [disabled]="!hasPrev()"
+        (click)="go(page() - 1)"
+        aria-label="Previous page"
+        class="flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <svg
+          class="h-4 w-4"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12.79 5.23a.75.75 0 010 1.06L9.06 10l3.73 3.71a.75.75 0 11-1.06 1.06l-4.25-4.24a.75.75 0 010-1.06l4.25-4.24a.75.75 0 011.06 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </li>
+
+    @for (token of pages(); track $index) {
+      <li>
+        @if (token === gap) {
+          <span class="flex h-8 w-8 items-center justify-center text-slate-400"
+            >…</span
+          >
+        } @else {
+          <button
+            type="button"
+            (click)="go(token)"
+            [attr.aria-current]="token === page() ? 'page' : null"
+            class="flex h-8 min-w-8 items-center justify-center rounded-md border px-2 text-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-300"
+            [class.border-brand-600]="token === page()"
+            [class.bg-brand-600]="token === page()"
+            [class.text-white]="token === page()"
+            [class.border-slate-200]="token !== page()"
+            [class.text-slate-600]="token !== page()"
+            [class.hover:bg-slate-100]="token !== page()"
+          >
+            {{ token }}
+          </button>
+        }
+      </li>
+    }
+
+    <!-- Next page button. -->
+    <li>
+      <button
+        type="button"
+        [disabled]="!hasNext()"
+        (click)="go(page() + 1)"
+        aria-label="Next page"
+        class="flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <svg
+          class="h-4 w-4"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M7.21 14.77a.75.75 0 010-1.06L10.94 10 7.21 6.29a.75.75 0 111.06-1.06l4.25 4.24a.75.75 0 010 1.06l-4.25 4.24a.75.75 0 01-1.06 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </li>
+  </ul>
+</nav>
