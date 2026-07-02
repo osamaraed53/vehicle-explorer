@@ -14,13 +14,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddCarter();
 
-string webDomain = builder.Configuration["WebDomain"]!;
+string[] webDomains = builder.Configuration["WebDomain"]!
+    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp",
         builder => builder
-            .WithOrigins(webDomain)
+            .WithOrigins(webDomains)
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials());
@@ -58,6 +59,8 @@ builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 app.UseCors("AllowAngularApp");
@@ -71,6 +74,8 @@ if (app.Environment.IsDevelopment())
 
 }
 
+
+app.MapHealthChecks("/health");
 
 app.MapCarter();
 
